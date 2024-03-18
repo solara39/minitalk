@@ -14,6 +14,8 @@
 #include <string.h>
 #include <signal.h>
 #include <stdlib.h>
+#include "libft/libft.h"
+#include "ft_printf/ft_printf.h"
 
 void	send_chr(const pid_t pid, char c)
 {
@@ -33,7 +35,7 @@ void	send_chr(const pid_t pid, char c)
 				exit(1);
 		}
 		bits--;
-		usleep(1000);
+		usleep(100);
 	}
 }
 
@@ -52,7 +54,9 @@ int	main(int argc, char **argv)
 
 	if (argc != 3)
 		return (1);
-	pid = atoi(argv[1]);//要改善
+	pid = ft_atoi(argv[1]);
+	if (pid <= 0)
+		exit(1);
 	send_str(pid, argv[2]);
 	return (0);
 }

@@ -13,10 +13,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include "libft/libft.h"
+#include "ft_printf/ft_printf.h"
 
 volatile sig_atomic_t	bits = 0;
 
-void	signal_handler(int signum, siginfo_t *info, void *dummy)
+void	signal_handler(int signum)
 {
 	static int	i;
 	char		c;
@@ -47,9 +49,9 @@ int	main()
 	sa2.sa_handler = signal_handler;
 	sa1.sa_flags = SA_SIGINFO;
 	sa2.sa_flags = SA_SIGINFO;
-	if (-1 == sigaction(SIGUSR1, &sa1, NULL)
+	if (-1 == sigaction(SIGUSR1, &sa1, NULL))
 		exit(1);
-	if (-1 == sigaction(SIGUSR2, &sa2, NULL)
+	if (-1 == sigaction(SIGUSR2, &sa2, NULL))
 		exit(1);
 	ft_printf("%d",getpid());
 	while (1)
