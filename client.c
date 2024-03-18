@@ -23,10 +23,17 @@ void	send_chr(const pid_t pid, char c)
 	while (bits >= 0)
 	{
 		if (c & (1 << bits))
-			kill(pid, SIGUSER1);
+		{
+			if (kill(pid, SIGUSR1) == -1)
+				exit(1);
+		}
 		else
-			kill(pid, SIGUSER2);
+		{
+			if (kill(pid, SIGUSR2) == -1)
+				exit(1);
+		}
 		bits--;
+		usleep(1000);
 	}
 }
 
@@ -47,4 +54,5 @@ int	main(int argc, char **argv)
 		return (1);
 	pid = atoi(argv[1]);//要改善
 	send_str(pid, argv[2]);
+	return (0);
 }

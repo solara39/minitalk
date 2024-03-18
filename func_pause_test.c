@@ -4,28 +4,15 @@
 #include <stdio.h>
 #include <time.h>
 
-void catcher(int signum) {
-  puts("inside catcher...");
-}
-
-void timestamp() {
-  time_t t;
-  time(&t);
-  printf("the time is %s", ctime(&t));
+void handler(int sig) {
+    printf("シグナルを受信しました。\n");
 }
 
 int main() {
-  struct sigaction sigact;
+    signal(SIGINT, handler);
+    printf("Ctrl+Cを押すとシグナルを送信します。\n");
+    pause();
+    printf("プログラムが再開しました。\n");
 
-  sigemptyset(&sigact.sa_mask);
-  sigact.sa_flags = 0;
-  sigact.sa_handler = catcher;
-  sigaction(SIGALRM, &sigact, NULL);
-
-  alarm(10);
-  printf("before pause... ");
-  timestamp();
-  pause();
-  printf("after pause... ");
-  timestamp();
+    return 0;
 }

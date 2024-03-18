@@ -22,16 +22,17 @@ void	signal_handler(int signum, siginfo_t *info, void *dummy)
 	char		c;
 
 	bits = bits << 1;
-	if (signum == SIGUSER1)
+	if (signum == SIGUSR1)
 		bits |= 1;
-	else if (signum == SIGUSER2)
+	else if (signum == SIGUSR2)
 		;
 	i++;
-	c = "0xff" & bits;
+	c = 0xFF & bits;
 	if (i == 8)
 	{
 		write(1, &c, 1);
 		i = 0;
+		bits = 0;
 	}
 }
 
@@ -40,18 +41,18 @@ int	main()
 	struct sigaction	sa1;
 	struct sigaction	sa2;
 
-	if (-1 == sigemptyset(&sa1.sa_mask)
-		exit(1);
-	if (-1 == sigemptyset(&sa2.sa_mask)
-		exit(1);
+	sigemptyset(&sa1.sa_mask);
+	sigemptyset(&sa2.sa_mask);
 	sa1.sa_handler = signal_handler;
-	sa2.sa-handler = signal_handler;
+	sa2.sa_handler = signal_handler;
 	sa1.sa_flags = SA_SIGINFO;
 	sa2.sa_flags = SA_SIGINFO;
-	if (-1 == sigaction(SIGINT, &sa1, NULL)
+	if (-1 == sigaction(SIGUSR1, &sa1, NULL)
 		exit(1);
-	if (-1 == sigaction(SIGINT, &sa2, NULL)
+	if (-1 == sigaction(SIGUSR2, &sa2, NULL)
 		exit(1);
 	ft_printf("%d",getpid());
+	while (1)
+		pause();
 	return (0);
 }
